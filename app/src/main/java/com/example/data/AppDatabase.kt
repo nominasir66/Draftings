@@ -31,22 +31,26 @@ abstract class AppDatabase : RoomDatabase() {
                         super.onCreate(db)
                         // Pre-populate with starter templates
                         CoroutineScope(Dispatchers.IO).launch {
-                            val dao = getInstance(context).documentDao()
-                            LegalTemplates.allTemplates.take(4).forEach { template ->
-                                val doc = template.documentModel
-                                val contentJson = DocumentSerializer.toJson(doc)
-                                val snippet = doc.pages.firstOrNull()?.paragraphs?.firstOrNull { it.text.isNotBlank() }?.text ?: ""
-                                val entity = DocumentEntity(
-                                    title = template.titleUrdu,
-                                    category = template.category.name,
-                                    contentJson = contentJson,
-                                    pageCount = doc.pages.size,
-                                    previewSnippet = snippet.take(120),
-                                    isFavorite = template.id == "template_affidavit",
-                                    createdAt = System.currentTimeMillis(),
-                                    updatedAt = System.currentTimeMillis()
-                                )
-                                dao.insertDocument(entity)
+                            try {
+                                val dao = getInstance(context).documentDao()
+                                LegalTemplates.allTemplates.take(4).forEach { template ->
+                                    val doc = template.documentModel
+                                    val contentJson = DocumentSerializer.toJson(doc)
+                                    val snippet = doc.pages.firstOrNull()?.paragraphs?.firstOrNull { it.text.isNotBlank() }?.text ?: ""
+                                    val entity = DocumentEntity(
+                                        title = template.titleUrdu,
+                                        category = template.category.name,
+                                        contentJson = contentJson,
+                                        pageCount = doc.pages.size,
+                                        previewSnippet = snippet.take(120),
+                                        isFavorite = template.id == "template_affidavit",
+                                        createdAt = System.currentTimeMillis(),
+                                        updatedAt = System.currentTimeMillis()
+                                    )
+                                    dao.insertDocument(entity)
+                                }
+                            } catch (e: Exception) {
+                                // Prevent unhandled coroutine exception crash
                             }
                         }
                     }
