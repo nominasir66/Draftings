@@ -33,21 +33,25 @@ object FontHelper {
             val tf = Typeface.createFromAsset(context.assets, "Jameel Noori Nastaleeq Regular.ttf")
             cachedNastaleeqTypeface = tf
             tf
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             try {
                 Typeface.create("serif", Typeface.NORMAL)
-            } catch (ex: Exception) {
+            } catch (ex: Throwable) {
                 Typeface.DEFAULT
             }
         }
     }
 
     fun getTypefaceByName(context: Context, fontName: String, isBold: Boolean, isItalic: Boolean): Typeface {
-        val baseTypeface = when (fontName) {
-            FONT_JAMEEL_NASTALEEQ -> getNastaleeqTypeface(context)
-            FONT_SYSTEM_SERIF -> Typeface.SERIF
-            FONT_MONOSPACE -> Typeface.MONOSPACE
-            else -> Typeface.SANS_SERIF
+        val baseTypeface = try {
+            when (fontName) {
+                FONT_JAMEEL_NASTALEEQ -> getNastaleeqTypeface(context)
+                FONT_SYSTEM_SERIF -> Typeface.SERIF
+                FONT_MONOSPACE -> Typeface.MONOSPACE
+                else -> Typeface.SANS_SERIF
+            }
+        } catch (e: Throwable) {
+            Typeface.DEFAULT
         }
 
         val style = when {
@@ -59,7 +63,7 @@ object FontHelper {
 
         return try {
             Typeface.create(baseTypeface, style)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             baseTypeface
         }
     }
@@ -68,24 +72,18 @@ object FontHelper {
     fun getComposeFontFamily(fontName: String): FontFamily {
         val context = LocalContext.current
         return remember(fontName) {
-            when (fontName) {
-                FONT_JAMEEL_NASTALEEQ -> {
-                    try {
-                        FontFamily(
-                            androidx.compose.ui.text.font.Font(
-                                "Jameel Noori Nastaleeq Regular.ttf",
-                                context.assets,
-                                FontWeight.Normal,
-                                FontStyle.Normal
-                            )
-                        )
-                    } catch (e: Exception) {
-                        FontFamily.Serif
+            try {
+                when (fontName) {
+                    FONT_JAMEEL_NASTALEEQ -> {
+                        val tf = getNastaleeqTypeface(context)
+                        FontFamily(tf)
                     }
+                    FONT_SYSTEM_SERIF -> FontFamily.Serif
+                    FONT_MONOSPACE -> FontFamily.Monospace
+                    else -> FontFamily.SansSerif
                 }
-                FONT_SYSTEM_SERIF -> FontFamily.Serif
-                FONT_MONOSPACE -> FontFamily.Monospace
-                else -> FontFamily.SansSerif
+            } catch (e: Throwable) {
+                FontFamily.Default
             }
         }
     }

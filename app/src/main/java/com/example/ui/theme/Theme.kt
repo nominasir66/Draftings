@@ -80,11 +80,15 @@ fun MyApplicationTheme(
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            val activity = view.context as? Activity
-            activity?.window?.let { window ->
-                val insetsController = WindowCompat.getInsetsController(window, view)
-                insetsController.isAppearanceLightStatusBars = !darkTheme
-                insetsController.isAppearanceLightNavigationBars = !darkTheme
+            try {
+                val activity = view.context as? Activity
+                activity?.window?.let { window ->
+                    val insetsController = WindowCompat.getInsetsController(window, view)
+                    insetsController.isAppearanceLightStatusBars = !darkTheme
+                    insetsController.isAppearanceLightNavigationBars = !darkTheme
+                }
+            } catch (e: Throwable) {
+                // Ignore safe insets styling on older or vendor ROMs
             }
         }
     }
