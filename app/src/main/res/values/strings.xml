@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Draftings</string>
+    <string name="app_tagline">Urdu Legal &amp; Formal Document Drafter</string>
+    <string name="new_document">New Document</string>
+    <string name="blank_document">Blank Document</string>
+    <string name="recent_documents">Recent Documents</string>
+    <string name="search_documents">Search documents…</string>
+    <string name="no_documents">No documents found</string>
+    <string name="create_first_doc">Create your first legal or formal Urdu draft</string>
+    <string name="templates">Legal Templates</string>
+    <string name="saved_status">Saved</string>
+    <string name="unsaved_status">Unsaved changes</string>
+    <string name="saving_status">Saving…</string>
+</resources>

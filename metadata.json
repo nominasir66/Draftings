@@ -1,0 +1,6 @@
+{
+  "name": "Draftings",
+  "description": "Professional mobile document drafting and editor app for Urdu legal, court, and formal documents with A4 multi-page layout, rich typography, text boxes, and PDF export.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
